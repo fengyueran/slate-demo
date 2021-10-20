@@ -2,6 +2,9 @@ import React, { useState, useMemo, useEffect } from "react";
 // import imageExtensions from "image-extensions";
 // import isUrl from "is-url";
 import { Editor, Transforms, createEditor, Descendant } from "slate";
+import { DragIndicator } from "@styled-icons/material/DragIndicator";
+
+import Tippy from "@tippyjs/react";
 
 import {
   Slate,
@@ -17,14 +20,17 @@ import { withHistory } from "slate-history";
 import { css } from "@emotion/css";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import styled from "styled-components";
+import { withDraggable, grabberTooltipProps } from "./dnd";
 
 // import { Button, Icon, Toolbar } from "../components";
-
+const EditorContainer = styled.div`
+  padding: 150px;
+`;
 const Toolbar = () => {
   const editor = useSlate();
   useEffect(() => {
     const { selection } = editor;
-    console.log("9999", selection);
     if (
       !selection ||
       !ReactEditor.isFocused(editor)
@@ -50,18 +56,26 @@ const ImagesExample = () => {
   );
 
   return (
-    // <DndProvider backend={HTML5Backend}>
-    <Slate editor={editor} value={value} onChange={(value) => setValue(value)}>
-      {/* <Toolbar>
+    <DndProvider backend={HTML5Backend}>
+      <Slate
+        editor={editor}
+        value={value}
+        onChange={(value) => setValue(value)}
+      >
+        {/* <Toolbar>
         <InsertImageButton />
       </Toolbar> */}
-      <Toolbar />
-      <Editable
-        renderElement={(props) => <Element {...props} />}
-        placeholder="Enter some text..."
-      />
-    </Slate>
-    // </DndProvider>
+        <Toolbar />
+
+        <EditorContainer>
+          <Editable
+            onDrop={() => 1}
+            renderElement={(props) => <Element {...props} />}
+            placeholder="Enter some text..."
+          />
+        </EditorContainer>
+      </Slate>
+    </DndProvider>
   );
 };
 
@@ -106,6 +120,26 @@ const withImages = (editor) => {
 //   Transforms.insertNodes(editor, image);
 // };
 
+const Praragraph = ({ attributes, children }) => {
+  return <p {...attributes}>{children}</p>;
+};
+
+const DraggableP = withDraggable(Praragraph, {
+  onRenderDragHandle: ({ styles, ...props }) => (
+    <Tippy {...grabberTooltipProps}>
+      <button type="button" {...props} css={styles}>
+        <DragIndicator
+          style={{
+            width: 18,
+            height: 18,
+            color: "rgba(55, 53, 47, 0.3)",
+          }}
+        />
+      </button>
+    </Tippy>
+  ),
+});
+let id = 0;
 const Element = (props) => {
   const { attributes, children, element } = props;
 
@@ -115,7 +149,11 @@ const Element = (props) => {
     case "imageTitle":
       return <div {...props}>{children}</div>;
     default:
-      return <p {...attributes}>{children}</p>;
+      id++;
+      if (!element.id) {
+        element.id = id;
+      }
+      return <DraggableP {...props} />;
   }
 };
 
@@ -176,13 +214,21 @@ const initialValue = [
       },
     ],
   },
+  // {
+  //   type: "image",
+  //   url: "https://source.unsplash.com/kFrdX5IeQzI",
+  //   children: [
+  //     {
+  //       type: "imageTitle",
+  //       children: [{ text: "this is image title" }],
+  //     },
+  //   ],
+  // },
   {
-    type: "image",
-    url: "https://source.unsplash.com/kFrdX5IeQzI",
+    type: "paragraph",
     children: [
       {
-        type: "imageTitle",
-        children: [{ text: "this is image title" }],
+        text: "This example shows images in action. It features two ways to add images. You can either add an image via the toolbar icon above, or if you want in on a little secret, copy an image URL to your clipboard and paste it anywhere in the editor!",
       },
     ],
   },
@@ -190,7 +236,7 @@ const initialValue = [
     type: "paragraph",
     children: [
       {
-        text: "This example shows images in action. It features two ways to add images. You can either add an image via the toolbar icon above, or if you want in on a little secret, copy an image URL to your clipboard and paste it anywhere in the editor!",
+        text: "asjdlkfjasdlkfjals;dfjaskdl;fjlkas;dfjl;kasjflk;asdjfkldasjflkdsaj",
       },
     ],
   },
