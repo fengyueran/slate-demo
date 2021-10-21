@@ -139,24 +139,6 @@ const DraggableP = withDraggable(Praragraph, {
     </Tippy>
   ),
 });
-let id = 0;
-const Element = (props) => {
-  const { attributes, children, element } = props;
-
-  switch (element.type) {
-    case "image":
-      return <Image {...props} />;
-    case "imageTitle":
-      return <div {...props}>{children}</div>;
-    default:
-      id++;
-      if (!element.id) {
-        element.id = id;
-      }
-      return <DraggableP {...props} />;
-  }
-};
-
 const Image = ({ attributes, children, element }) => {
   const selected = useSelected();
   const focused = useFocused();
@@ -176,6 +158,43 @@ const Image = ({ attributes, children, element }) => {
       </div>
     </div>
   );
+};
+const DraggableImg = withDraggable(Image, {
+  onRenderDragHandle: ({ styles, ...props }) => (
+    <Tippy {...grabberTooltipProps}>
+      <button type="button" {...props} css={styles}>
+        <DragIndicator
+          style={{
+            width: 18,
+            height: 18,
+            color: "rgba(55, 53, 47, 0.3)",
+          }}
+        />
+      </button>
+    </Tippy>
+  ),
+});
+let id = 0;
+const Element = (props) => {
+  const { attributes, children, element } = props;
+
+  switch (element.type) {
+    case "image":
+      if (!element.id) {
+        id++;
+        element.id = id;
+      }
+      return <DraggableImg {...props} />;
+    case "imageTitle":
+      return <div {...props}>{children}</div>;
+    default:
+      console.log("id-----------", element.id);
+      if (!element.id) {
+        id++;
+        element.id = id;
+      }
+      return <DraggableP {...props} />;
+  }
 };
 
 const InsertImageButton = () => {
@@ -214,16 +233,16 @@ const initialValue = [
       },
     ],
   },
-  // {
-  //   type: "image",
-  //   url: "https://source.unsplash.com/kFrdX5IeQzI",
-  //   children: [
-  //     {
-  //       type: "imageTitle",
-  //       children: [{ text: "this is image title" }],
-  //     },
-  //   ],
-  // },
+  {
+    type: "image",
+    url: "https://source.unsplash.com/kFrdX5IeQzI",
+    children: [
+      {
+        type: "imageTitle",
+        children: [{ text: "this is image title" }],
+      },
+    ],
+  },
   {
     type: "paragraph",
     children: [

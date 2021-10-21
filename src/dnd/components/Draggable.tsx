@@ -59,15 +59,15 @@ export const Draggable = (props: DraggableProps) => {
             css={styles.dropLine?.css}
             className={styles.dropLine?.className}
             contentEditable={false}
-            style={{
-              height: "0.125rem",
-              left: 0,
-              position: "absolute",
-              right: 0,
-              opacity: 1,
-              background: "red",
-              top: "-1px",
-            }}
+            // style={{
+            //   height: "0.125rem",
+            //   left: 0,
+            //   position: "absolute",
+            //   right: 0,
+            //   opacity: 1,
+            //   background: "red",
+            //   top: "-1px",
+            // }}
           />
         )}
         {/* 
