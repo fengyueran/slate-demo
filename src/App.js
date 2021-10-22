@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 // import imageExtensions from "image-extensions";
 // import isUrl from "is-url";
 import { Editor, Transforms, createEditor, Descendant } from "slate";
-import { DragIndicator } from "@styled-icons/material/DragIndicator";
+import { DragDrop } from "@styled-icons/remix-line";
 
 import Tippy from "@tippyjs/react";
 
@@ -54,6 +54,8 @@ const ImagesExample = () => {
     () => withImages(withHistory(withReact(createEditor()))),
     []
   );
+
+  console.log("++++++++++++", value);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -128,7 +130,7 @@ const DraggableP = withDraggable(Praragraph, {
   onRenderDragHandle: ({ styles, ...props }) => (
     <Tippy {...grabberTooltipProps}>
       <button type="button" {...props} css={styles}>
-        <DragIndicator
+        <DragDrop
           style={{
             width: 18,
             height: 18,
@@ -163,7 +165,7 @@ const DraggableImg = withDraggable(Image, {
   onRenderDragHandle: ({ styles, ...props }) => (
     <Tippy {...grabberTooltipProps}>
       <button type="button" {...props} css={styles}>
-        <DragIndicator
+        <DragDrop
           style={{
             width: 18,
             height: 18,
@@ -235,7 +237,7 @@ const initialValue = [
   },
   {
     type: "image",
-    url: "https://source.unsplash.com/kFrdX5IeQzI",
+    url: "./test.jpg",
     children: [
       {
         type: "imageTitle",

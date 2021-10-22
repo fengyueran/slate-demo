@@ -22,7 +22,6 @@
     "target": "es2017",
     "noFallthroughCasesInSwitch": true
   },
-  "files": ["types/twin.d.ts"],
   "exclude": [
     "node_modules",
     "**/node_modules",

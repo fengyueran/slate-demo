@@ -42,7 +42,6 @@ export const Draggable = (props: DraggableProps) => {
       css={styles.root.css}
       className={styles.root.className}
       ref={multiRootRef}
-      data-id="hhhhh"
       style={{ position: "relative" }}
     >
       <div
@@ -59,6 +58,7 @@ export const Draggable = (props: DraggableProps) => {
             css={styles.dropLine?.css}
             className={styles.dropLine?.className}
             contentEditable={false}
+            style={{ background: "red" }}
             // style={{
             //   height: "0.125rem",
             //   left: 0,
@@ -83,15 +83,6 @@ export const Draggable = (props: DraggableProps) => {
           ...(styles.blockAndGutter?.css ?? []),
           ...(styles.gutterLeft?.css ?? []),
         ]}
-        style={{
-          position: "absolute",
-          top: 0,
-          display: "flex",
-          height: "100%",
-          opacity: 1,
-          transform: "translateX(-100%)",
-          paddingTop: "0.25rem",
-        }}
         className={styles.gutterLeft?.className}
         contentEditable={false}
       >
