@@ -27,8 +27,6 @@ export const Draggable = (props: DraggableProps) => {
     blockRef: rootRef,
   });
 
-  console.log("dropLine", dropLine);
-
   const multiDragRef = useMergedRef(dragRef, dragWrapperRef);
 
   const styles = getDraggableStyles({

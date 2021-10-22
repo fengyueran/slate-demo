@@ -25,7 +25,7 @@ import { withDraggable, grabberTooltipProps } from "./dnd";
 
 // import { Button, Icon, Toolbar } from "../components";
 const EditorContainer = styled.div`
-  padding: 150px;
+  padding: 50px;
 `;
 const Toolbar = () => {
   const editor = useSlate();
@@ -43,20 +43,16 @@ const Toolbar = () => {
     const domSelection = window.getSelection();
     const domRange = domSelection.getRangeAt(0);
     const rect = domRange.getBoundingClientRect();
-    console.log("domSelection", domSelection);
-    console.log("domRange", domRange);
   }, [editor.selection]);
   return null;
 };
-const ImagesExample = () => {
+const DemoEditor = () => {
   const [value, setValue] = useState(initialValue);
   const editor = useMemo(
     () => withImages(withHistory(withReact(createEditor()))),
     []
   );
-
-  console.log("++++++++++++", value);
-
+  console.log("Editor value:", value);
   return (
     <DndProvider backend={HTML5Backend}>
       <Slate
@@ -67,8 +63,6 @@ const ImagesExample = () => {
         {/* <Toolbar>
         <InsertImageButton />
       </Toolbar> */}
-        <Toolbar />
-
         <EditorContainer>
           <Editable
             onDrop={() => 1}
@@ -181,6 +175,8 @@ const Element = (props) => {
   const { attributes, children, element } = props;
 
   switch (element.type) {
+    case "h1":
+      return <h1 {...props}>{children}</h1>;
     case "image":
       if (!element.id) {
         id++;
@@ -188,9 +184,12 @@ const Element = (props) => {
       }
       return <DraggableImg {...props} />;
     case "imageTitle":
-      return <div {...props}>{children}</div>;
+      return (
+        <div style={{ marginLeft: 170 }} {...props}>
+          {children}
+        </div>
+      );
     default:
-      console.log("id-----------", element.id);
       if (!element.id) {
         id++;
         element.id = id;
@@ -228,10 +227,26 @@ const isImageUrl = (url) => {
 
 const initialValue = [
   {
+    type: "h1",
+    children: [
+      {
+        text: "Next Medical Report",
+      },
+    ],
+  },
+  {
     type: "paragraph",
     children: [
       {
-        text: "In addition to nodes that contain editable text, you can also create other types of nodes, like images or videos.",
+        text: "这是一个可编辑的，支持redo、undo的Report demo。这个demo里实现了Block的拖曳调序功能以及一个基于editor的可编辑图片名称的组件。",
+      },
+    ],
+  },
+  {
+    type: "paragraph",
+    children: [
+      {
+        text: "Hover时Block的左上方出现拖动的按钮，拖动出现红色的位置线时松开鼠标完成移动。",
       },
     ],
   },
@@ -241,7 +256,7 @@ const initialValue = [
     children: [
       {
         type: "imageTitle",
-        children: [{ text: "this is image title" }],
+        children: [{ text: "我是可以编辑的图片名" }],
       },
     ],
   },
@@ -249,7 +264,7 @@ const initialValue = [
     type: "paragraph",
     children: [
       {
-        text: "This example shows images in action. It features two ways to add images. You can either add an image via the toolbar icon above, or if you want in on a little secret, copy an image URL to your clipboard and paste it anywhere in the editor!",
+        text: "打开控制台你可以看到实时更新的Editor value。",
       },
     ],
   },
@@ -257,10 +272,10 @@ const initialValue = [
     type: "paragraph",
     children: [
       {
-        text: "asjdlkfjasdlkfjals;dfjaskdl;fjlkas;dfjl;kasjflk;asdjfkldasjflkdsaj",
+        text: "PS：当前并不支持动态新增block进行拖曳，比如回车添加新的文字。",
       },
     ],
   },
 ];
 
-export default ImagesExample;
+export default DemoEditor;

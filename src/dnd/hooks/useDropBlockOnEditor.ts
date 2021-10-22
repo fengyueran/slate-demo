@@ -73,7 +73,6 @@ export const useDropBlockOnEditor = (
       isOver: monitor.isOver(),
     }),
     hover(item: DragItemBlock, monitor: DropTargetMonitor) {
-      console.log("id", id);
       const direction = getHoverDirection(item, monitor, blockRef, id);
       const dropLineDir = getNewDirection(dropLine, direction);
       if (dropLineDir) setDropLine(dropLineDir);
