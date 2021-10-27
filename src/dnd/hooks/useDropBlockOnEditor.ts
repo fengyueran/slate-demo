@@ -24,6 +24,7 @@ export const useDropBlockOnEditor = (
     accept: "block",
     drop: (dragItem: DragItemBlock, monitor: DropTargetMonitor) => {
       const direction = getHoverDirection(dragItem, monitor, blockRef, id);
+      debugger;
       if (!direction) return;
 
       const dragEntry = findNode(editor, {

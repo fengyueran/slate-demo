@@ -22,6 +22,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
 import { withDraggable, grabberTooltipProps } from "./dnd";
+import { withNodeId } from "./withIDPlugin";
 
 // import { Button, Icon, Toolbar } from "../components";
 const EditorContainer = styled.div`
@@ -49,7 +50,7 @@ const Toolbar = () => {
 const DemoEditor = () => {
   const [value, setValue] = useState(initialValue);
   const editor = useMemo(
-    () => withImages(withHistory(withReact(createEditor()))),
+    () => withImages(withHistory(withReact(withNodeId()(createEditor())))),
     []
   );
   console.log("Editor value:", value);
@@ -265,14 +266,6 @@ const initialValue = [
     children: [
       {
         text: "打开控制台你可以看到实时更新的Editor value。",
-      },
-    ],
-  },
-  {
-    type: "paragraph",
-    children: [
-      {
-        text: "PS：当前并不支持动态新增block进行拖曳，比如回车添加新的文字。",
       },
     ],
   },
