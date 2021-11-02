@@ -30,6 +30,7 @@ const EditorContainer = styled.div`
 `;
 const Toolbar = () => {
   const editor = useSlate();
+  console.log("select", editor.selection);
   useEffect(() => {
     const { selection } = editor;
     if (
@@ -61,9 +62,9 @@ const DemoEditor = () => {
         value={value}
         onChange={(value) => setValue(value)}
       >
-        {/* <Toolbar>
-        <InsertImageButton />
-      </Toolbar> */}
+        <Toolbar>
+          <InsertImageButton />
+        </Toolbar>
         <EditorContainer>
           <Editable
             onDrop={() => 1}
@@ -121,6 +122,14 @@ const Praragraph = ({ attributes, children }) => {
   return <p {...attributes}>{children}</p>;
 };
 
+const Block = ({ attributes, children }) => {
+  return (
+    <div style={{ display: "flex" }} {...attributes}>
+      {children}
+    </div>
+  );
+};
+
 const DraggableP = withDraggable(Praragraph, {
   onRenderDragHandle: ({ styles, ...props }) => (
     <Tippy {...grabberTooltipProps}>
@@ -171,6 +180,22 @@ const DraggableImg = withDraggable(Image, {
     </Tippy>
   ),
 });
+
+const DraggableBlock = withDraggable(Block, {
+  onRenderDragHandle: ({ styles, ...props }) => (
+    <Tippy {...grabberTooltipProps}>
+      <button type="button" {...props} css={styles}>
+        <DragDrop
+          style={{
+            width: 18,
+            height: 18,
+            color: "rgba(55, 53, 47, 0.3)",
+          }}
+        />
+      </button>
+    </Tippy>
+  ),
+});
 let id = 0;
 const Element = (props) => {
   const { attributes, children, element } = props;
@@ -190,6 +215,8 @@ const Element = (props) => {
           {children}
         </div>
       );
+    case "block":
+      return <DraggableBlock {...props} />;
     default:
       if (!element.id) {
         id++;
@@ -266,6 +293,14 @@ const initialValue = [
     children: [
       {
         text: "打开控制台你可以看到实时更新的Editor value。",
+      },
+    ],
+  },
+  {
+    type: "paragraph",
+    children: [
+      {
+        text: "tstewtetsetest",
       },
     ],
   },

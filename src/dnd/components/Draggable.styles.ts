@@ -1,11 +1,11 @@
-import { createStyles } from '@udecode/plate-styled-components';
-import { css } from 'styled-components';
-import tw from 'twin.macro';
-import { DraggableStyleProps } from './Draggable.types';
+import { createStyles } from "@udecode/plate-styled-components";
+import { css } from "styled-components";
+import tw from "twin.macro";
+import { DraggableStyleProps } from "./Draggable.types";
 
 export const getDraggableStyles = (props: DraggableStyleProps) =>
   createStyles(
-    { prefixClassNames: 'Draggable', ...props },
+    { prefixClassNames: "Draggable", ...props },
     {
       root: [
         tw`relative`,
@@ -33,10 +33,14 @@ export const getDraggableStyles = (props: DraggableStyleProps) =>
         tw`minWidth[18px] height[18px]`,
       ],
       dropLine: [
-        tw`absolute left-0 right-0 h-0.5 opacity-100`,
+        tw`absolute  h-0.5 opacity-100`,
         tw`background[#B4D5FF]`,
-        props.direction === 'top' && tw`-top-px`,
-        props.direction === 'bottom' && tw`-bottom-px`,
+        props.direction === "top" && tw`-top-px right-0 left-0`,
+        props.direction === "right" &&
+          tw`height[100%] width[0.125rem] top-0 right-0`,
+        props.direction === "bottom" && tw`-bottom-px right-0 left-0`,
+        props.direction === "left" &&
+          tw`height[100%] width[0.125rem] top-0 left-0`,
       ],
     }
   );

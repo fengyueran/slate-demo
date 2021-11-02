@@ -3,4 +3,4 @@ export interface DragItemBlock {
   type: string;
 }
 
-export type DropDirection = 'top' | 'bottom' | undefined;
+export type DropDirection = "top" | "right" | "bottom" | "left" | undefined;

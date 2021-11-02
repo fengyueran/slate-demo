@@ -1,11 +1,11 @@
-import React from 'react';
-import { TEditor } from '@udecode/plate-core';
-import { StyledElementProps } from '@udecode/plate-styled-components';
-import { Element, Path } from 'slate';
-import { CSSProp } from 'styled-components';
+import React from "react";
+import { TEditor } from "@udecode/plate-core";
+import { StyledElementProps } from "@udecode/plate-styled-components";
+import { Element, Path } from "slate";
+import { CSSProp } from "styled-components";
 
 export interface DraggableStyleProps extends DraggableProps {
-  direction: '' | 'top' | 'bottom';
+  direction: "" | "top" | "right" | "bottom" | "left";
   isDragging: boolean;
 
   selected?: boolean;

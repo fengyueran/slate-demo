@@ -1,5 +1,5 @@
-import { DropTargetMonitor, XYCoord } from 'react-dnd';
-import { DragItemBlock, DropDirection } from '../types';
+import { DropTargetMonitor, XYCoord } from "react-dnd";
+import { DragItemBlock, DropDirection } from "../types";
 
 /**
  * If dragging a block A over another block B:
@@ -8,7 +8,7 @@ import { DragItemBlock, DropDirection } from '../types';
 export const getHoverDirection = (
   dragItem: DragItemBlock,
   monitor: DropTargetMonitor,
-  ref: any,
+  ref: any, //hover ref
   hoverId: string
 ): DropDirection => {
   if (!ref.current) return;
@@ -28,6 +28,30 @@ export const getHoverDirection = (
   const clientOffset = monitor.getClientOffset();
   if (!clientOffset) return;
 
+  const dTop = Math.abs((clientOffset as XYCoord).y - hoverBoundingRect.top);
+  const dBottom = Math.abs(
+    (clientOffset as XYCoord).y - hoverBoundingRect.bottom
+  );
+  const dLeft = Math.abs((clientOffset as XYCoord).x - hoverBoundingRect.left);
+  const dRight = Math.abs(
+    (clientOffset as XYCoord).x - hoverBoundingRect.right
+  );
+
+  const distances = [dTop, dRight, dBottom, dLeft];
+  const min = Math.min(...distances);
+  const index = distances.indexOf(min);
+  switch (index) {
+    case 0:
+      return "top";
+    case 1:
+      return "right";
+    case 2:
+      return "bottom";
+    case 3:
+      return "left";
+    default:
+      return undefined;
+  }
   // Get pixels to the top
   const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
@@ -38,12 +62,12 @@ export const getHoverDirection = (
   // Dragging downwards
   // if (dragId < hoverId && hoverClientY < hoverMiddleY) {
   if (hoverClientY < hoverMiddleY) {
-    return 'top';
+    return "top";
   }
 
   // Dragging upwards
   // if (dragId > hoverId && hoverClientY > hoverMiddleY) {
   if (hoverClientY >= hoverMiddleY) {
-    return 'bottom';
+    return "bottom";
   }
 };
