@@ -1,6 +1,12 @@
 import { DropTargetMonitor, useDrop } from "react-dnd";
 import { findNode, isExpanded } from "@udecode/plate-common";
-import { Path, Transforms, Editor, Element as SlateElement } from "slate";
+import {
+  Path,
+  Transforms,
+  Editor,
+  Element as SlateElement,
+  Range,
+} from "slate";
 import { ReactEditor } from "slate-react";
 import { DragItemBlock } from "../types";
 import { getHoverDirection } from "../utils/getHoverDirection";
@@ -60,7 +66,7 @@ export const useDropBlockOnEditor = (
           nodePath[nodePath.length - 1] - 1,
         ];
 
-        if (Path.equals(dragPath, dropPath) || direction === "top") return;
+        if (Path.equals(dragPath, dropPath) && direction === "top") return;
       }
 
       const _dropPath = dropPath as Path;
@@ -74,37 +80,62 @@ export const useDropBlockOnEditor = (
         at: dragPath,
         to,
       });
-
+      console.log("Path.levels", Path.levels([3], { reverse: true }));
       if (direction === "left" || direction === "right") {
         const link = {
           type: "block",
-          url: "url",
-          children: [{ text: "url" }],
+          children: [],
         };
         // debugger; //eslint-disable-line
 
-        // const anchor = Path.isBefore(_dropPath, to)
-        //   ? { path: _dropPath, offset: 0 }
-        //   : { path: to, offset: 0 };
-        // const focus = Path.isBefore(_dropPath, to)
-        //   ? { path: [...to, 0], offset: 0 }
-        //   : { path: [..._dropPath, 0], offset: 0 };
-        // Transforms.wrapNodes(editor, link, {
-        //   split: true,
-        //   at: {
-        //     anchor,
-        //     focus,
-        //   },
-        // });
+        let anchor;
+        let focus;
+
+        if (Path.equals(_dropPath, to)) {
+          anchor = { path: _dropPath, offset: 0 };
+          focus = { path: [...Path.next(_dropPath), 0], offset: 0 };
+        } else {
+          anchor = Path.isBefore(_dropPath, to)
+            ? { path: _dropPath, offset: 0 }
+            : { path: to, offset: 0 };
+          focus = Path.isBefore(_dropPath, to)
+            ? { path: [...to, 0], offset: 0 }
+            : { path: [..._dropPath, 0], offset: 0 };
+        }
+
+        if (direction === "left") {
+          anchor = { path: to, offset: 0 };
+          focus = { path: Path.next(to), offset: 0 };
+        } else {
+          anchor = { path: Path.previous(to), offset: 0 };
+          focus = { path: to, offset: 0 };
+        }
+
+        Transforms.wrapNodes(editor, link, {
+          split: true,
+          at: {
+            anchor: { path: [0], offset: 0 },
+            focus: { path: [editor.children.length - 1, 0], offset: 0 },
+          },
+          match: (n) => {
+            console.log("------", n);
+            // debugger; //eslint-disable-line
+
+            const matched =
+              (n as any).id === id || (n as any).id === dragItem.id;
+            // debugger; //eslint-disable-line
+
+            return matched;
+          },
+        });
 
         // Transforms.unwrapNodes(editor, {
         //   split: true,
+        //   mode: "highest",
         //   match: (n) => {
-        //     const matched =
-        //       !Editor.isEditor(n) &&
-        //       SlateElement.isElement(n) &&
-        //       (n as any).type === "block";
-        //     debugger; //eslint-disable-line
+        //     console.log("------", n);
+        //     const matched = (n as any).id === 3 || (n as any).id === 4;
+        //     // debugger; //eslint-disable-line
 
         //     return matched;
         //   },
