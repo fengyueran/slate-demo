@@ -27,6 +27,7 @@ import { withNodeId } from "./withIDPlugin";
 // import { Button, Icon, Toolbar } from "../components";
 const EditorContainer = styled.div`
   padding: 50px;
+  width: 520px;
 `;
 const Toolbar = () => {
   const editor = useSlate();
@@ -129,6 +130,13 @@ const Block = ({ attributes, children }) => {
     </div>
   );
 };
+const Col = ({ attributes, children }) => {
+  return (
+    <div style={{ display: "flex", flexDirection: "column" }} {...attributes}>
+      {children}
+    </div>
+  );
+};
 
 const DraggableP = withDraggable(Praragraph, {
   onRenderDragHandle: ({ styles, ...props }) => (
@@ -216,7 +224,9 @@ const Element = (props) => {
         </div>
       );
     case "block":
-      return <DraggableBlock {...props} />;
+      return <Block {...props} />;
+    case "column":
+      return <Col {...props} />;
     default:
       if (!element.id) {
         id++;
@@ -266,7 +276,7 @@ const initialValue = [
     type: "paragraph",
     children: [
       {
-        text: "这是一个可编辑的，支持redo、undo的Report demo。这个demo里实现了Block的拖曳调序功能以及一个基于editor的可编辑图片名称的组件。",
+        text: "这是一个可编辑的，支持redo、undo的Report demo。这个demo里简单地实现了Block的上下左右地拖曳调序功能以及一个基于editor的可编辑图片名称的组件。",
       },
     ],
   },
@@ -300,7 +310,7 @@ const initialValue = [
     type: "paragraph",
     children: [
       {
-        text: "tstewtetsetest",
+        text: "PS：当前拖曳功能，只是一个基础地实现，还有很多问题待解决。",
       },
     ],
   },
