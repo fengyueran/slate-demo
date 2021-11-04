@@ -163,7 +163,7 @@ export const useDropBlockOnEditor = (
       }
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver(),
+      isOver: monitor.isOver({ shallow: true }),
     }),
     hover(item: DragItemBlock, monitor: DropTargetMonitor) {
       const direction = getHoverDirection(item, monitor, blockRef, id);

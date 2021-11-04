@@ -123,9 +123,9 @@ const Praragraph = ({ attributes, children }) => {
   return <p {...attributes}>{children}</p>;
 };
 
-const Block = ({ attributes, children }) => {
+const Row = ({ attributes, children }) => {
   return (
-    <div style={{ display: "flex" }} {...attributes}>
+    <div style={{ display: "flex", padding: 1 }} {...attributes}>
       {children}
     </div>
   );
@@ -189,7 +189,7 @@ const DraggableImg = withDraggable(Image, {
   ),
 });
 
-const DraggableBlock = withDraggable(Block, {
+const DraggableRow = withDraggable(Row, {
   onRenderDragHandle: ({ styles, ...props }) => (
     <Tippy {...grabberTooltipProps}>
       <button type="button" {...props} css={styles}>
@@ -204,6 +204,23 @@ const DraggableBlock = withDraggable(Block, {
     </Tippy>
   ),
 });
+
+const DraggableCol = withDraggable(Col, {
+  onRenderDragHandle: ({ styles, ...props }) => (
+    <Tippy {...grabberTooltipProps}>
+      <button type="button" {...props} css={styles}>
+        <DragDrop
+          style={{
+            width: 18,
+            height: 18,
+            color: "rgba(55, 53, 47, 0.3)",
+          }}
+        />
+      </button>
+    </Tippy>
+  ),
+});
+
 let id = 0;
 const Element = (props) => {
   const { attributes, children, element } = props;
@@ -218,13 +235,9 @@ const Element = (props) => {
       }
       return <DraggableImg {...props} />;
     case "imageTitle":
-      return (
-        <div style={{ marginLeft: 170 }} {...props}>
-          {children}
-        </div>
-      );
+      return <div {...props}>{children}</div>;
     case "block":
-      return <Block {...props} />;
+      return <DraggableRow {...props} />;
     case "column":
       return <Col {...props} />;
     default:

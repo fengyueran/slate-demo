@@ -18,9 +18,9 @@ export const getDraggableStyles = (props: DraggableStyleProps) =>
         `,
       ],
 
-      block: tw`overflow-auto`,
+      // block: tw`overflow-auto`,
       gutterLeft: [
-        tw`absolute top-0 flex h-full opacity-0`,
+        tw`absolute top-0 flex  opacity-0`,
         css`
           transform: translateX(-100%);
         `,
