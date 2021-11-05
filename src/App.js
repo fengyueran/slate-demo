@@ -68,7 +68,7 @@ const DemoEditor = () => {
         </Toolbar>
         <EditorContainer>
           <Editable
-            onDrop={() => 1}
+            onDrop={(editor) => editor.isDragging}
             renderElement={(props) => <Element {...props} />}
             placeholder="Enter some text..."
           />
