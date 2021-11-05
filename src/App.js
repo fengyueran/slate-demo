@@ -236,7 +236,7 @@ const Element = (props) => {
       return <DraggableImg {...props} />;
     case "imageTitle":
       return <div {...props}>{children}</div>;
-    case "block":
+    case "row":
       return <DraggableRow {...props} />;
     case "column":
       return <Col {...props} />;

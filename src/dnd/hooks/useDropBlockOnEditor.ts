@@ -101,21 +101,27 @@ export const useDropBlockOnEditor = (
         })?.[1] as Path;
 
         const parent = Node.parent(editor, newPath);
-        if (parent && (parent as any).type === "block") {
+        console.log("parent", parent);
+        if (parent && (parent as any).type === "row") {
+          console.log("id", id);
+          console.log("dragItem.id", dragItem.id);
           Transforms.wrapNodes(editor, link, {
             split: true,
             at: {
               anchor: { path: [0], offset: 0 },
-              focus: { path: [editor.children.length - 1, 0], offset: 0 },
+              focus: Editor.end(editor, [editor.children.length - 1]),
             },
             match: (n) => {
+              console.log("n", n);
               const matched =
                 (n as any).id === id || (n as any).id === dragItem.id;
-
+              console.log("matched", matched);
               return matched;
             },
           });
         }
+        const a = Editor.end(editor, [editor.children.length - 1]);
+        console.log("---------", a);
 
         // Transforms.unwrapNodes(editor, {
         //   split: true,
@@ -130,24 +136,32 @@ export const useDropBlockOnEditor = (
         // });
       }
       if (direction === "left" || direction === "right") {
-        const link = {
-          type: "block",
-          children: [],
-        };
+        const newPath = findNode(editor, {
+          at: [],
+          match: { id },
+        })?.[1] as Path;
 
-        Transforms.wrapNodes(editor, link, {
-          split: true,
-          at: {
-            anchor: { path: [0], offset: 0 },
-            focus: { path: [editor.children.length - 1, 0], offset: 0 },
-          },
-          match: (n) => {
-            const matched =
-              (n as any).id === id || (n as any).id === dragItem.id;
+        const parent = Node.parent(editor, newPath);
+        if ((parent as any)?.type !== "row") {
+          const link = {
+            type: "row",
+            children: [],
+          };
 
-            return matched;
-          },
-        });
+          Transforms.wrapNodes(editor, link, {
+            split: true,
+            at: {
+              anchor: { path: [0], offset: 0 },
+              focus: Editor.end(editor, [editor.children.length - 1]),
+            },
+            match: (n) => {
+              const matched =
+                (n as any).id === id || (n as any).id === dragItem.id;
+
+              return matched;
+            },
+          });
+        }
 
         // Transforms.unwrapNodes(editor, {
         //   split: true,
